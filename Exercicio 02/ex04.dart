@@ -1,11 +1,12 @@
+import 'dart:math';
+
 int elevacao(int base, int expo) {
-  int total = 1;
-  for (var i = 0; i < expo; i++) {
-    total *= base;
-  }
-  return total;
+  return pow(base, expo) as int;
 }
+
+var elevacaoArrow = (int base, int expo) => pow(base, expo) as int;
 
 void main(List<String> args) {
   print(elevacao(4, 4));
+  print(elevacaoArrow(4, 4));
 }
