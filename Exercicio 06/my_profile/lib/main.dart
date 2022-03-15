@@ -26,90 +26,92 @@ class HomePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: AppBar(
-          backgroundColor: Colors.cyan,
-          title: const Text('Meu perfil', textAlign: TextAlign.center),
-        ),
-        backgroundColor: Colors.cyan[200],
-        body: Container(
-          margin: const EdgeInsets.all(20.0),
-          child: Center(
-            child: Column(children: <Widget>[
-              Container(
-                width: 80,
-                height: 100,
-                decoration: const BoxDecoration(
-                    shape: BoxShape.circle,
-                    image: DecorationImage(
-                        fit: BoxFit.fill,
-                        image: AssetImage('assets/images/pp.jpeg'))),
-              ),
-              Container(
-                margin: const EdgeInsets.all(15),
-                child: const Text(
-                  'Luis Henrique Bueno',
-                  textAlign: TextAlign.center,
-                  overflow: TextOverflow.ellipsis,
-                  style: TextStyle(
-                      fontWeight: FontWeight.bold,
-                      fontFamily: 'PressStart2P',
-                      fontSize: 16),
-                ),
-              ),
-              Container(
-                  margin: const EdgeInsets.all(15),
-                  child: const Text(
-                    'Sou um desenvolvedor back-end com conhecimentos solidos em Python e alguns de seus Frameworks, também tenho conhecimento em JavaScript e agora estou iniciando uma jornada em Flutter.',
-                    textAlign: TextAlign.justify,
-                    style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
-                  )),
-              Container(
-                margin: const EdgeInsets.all(15),
-                child: const Text(
-                  'Contatos',
-                  textAlign: TextAlign.center,
-                  style: TextStyle(fontWeight: FontWeight.bold, fontSize: 24),
-                ),
-              ),
-              ElevatedButton.icon(
+      appBar: AppBar(
+        backgroundColor: Colors.cyan,
+        title: const Text('Meu perfil', textAlign: TextAlign.center),
+      ),
+      backgroundColor: Colors.cyan[200],
+      body: Center(
+        child: Column(children: <Widget>[
+          Container(
+            width: 100,
+            height: 120,
+            decoration: const BoxDecoration(
+                shape: BoxShape.circle,
+                image: DecorationImage(
+                    fit: BoxFit.fill,
+                    image: AssetImage('assets/images/pp.jpeg'))),
+          ),
+          Container(
+            margin: const EdgeInsets.all(15),
+            child: const Text(
+              'Luis Henrique Bueno',
+              textAlign: TextAlign.center,
+              overflow: TextOverflow.ellipsis,
+              style: TextStyle(
+                  fontWeight: FontWeight.bold,
+                  fontFamily: 'PressStart2P',
+                  fontSize: 16),
+            ),
+          ),
+          Container(
+              margin: const EdgeInsets.all(15),
+              child: const Text(
+                'Sou um desenvolvedor back-end com conhecimentos solidos em Python e alguns de seus Frameworks, também tenho conhecimento em JavaScript e agora estou iniciando uma jornada em Flutter.',
+                textAlign: TextAlign.justify,
+                style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+              )),
+          Container(
+            margin: const EdgeInsets.all(15),
+            child: const Text(
+              'Contatos',
+              textAlign: TextAlign.center,
+              style: TextStyle(fontWeight: FontWeight.bold, fontSize: 24),
+            ),
+          ),
+          Flexible(
+              child: ElevatedButton.icon(
                   onPressed: abrirWhatsapp,
                   icon: const Icon(Icons.whatsapp, size: 22),
                   label: const Text('Whatsapp'),
                   style: ButtonStyle(
-                      padding: MaterialStateProperty.all(const EdgeInsets.only(
-                          left: 65, right: 65, top: 15, bottom: 15)),
+                      padding: MaterialStateProperty.all(
+                          const EdgeInsets.only(left: 65, right: 65)),
                       textStyle: MaterialStateProperty.all(
-                          const TextStyle(fontSize: 18)))),
-              ElevatedButton.icon(
+                          const TextStyle(fontSize: 18))))),
+          Flexible(
+              child: ElevatedButton.icon(
                   onPressed: abrirInstagram,
                   icon: const Icon(Icons.camera_alt_outlined, size: 22),
                   label: const Text('Instagram'),
                   style: ButtonStyle(
-                      padding: MaterialStateProperty.all(const EdgeInsets.only(
-                          left: 65, right: 65, top: 15, bottom: 15)),
+                      padding: MaterialStateProperty.all(
+                          const EdgeInsets.only(left: 65, right: 65)),
                       textStyle: MaterialStateProperty.all(
-                          const TextStyle(fontSize: 18)))),
-              ElevatedButton.icon(
-                  onPressed: abrirWhatsapp,
-                  icon: const Icon(Icons.whatsapp, size: 22),
-                  label: const Text('Whatsapp'),
+                          const TextStyle(fontSize: 18))))),
+          Flexible(
+              child: ElevatedButton.icon(
+                  onPressed: fazerLigacao,
+                  icon: const Icon(Icons.phone, size: 22),
+                  label: const Text('Chamar'),
                   style: ButtonStyle(
-                      padding: MaterialStateProperty.all(const EdgeInsets.only(
-                          left: 65, right: 65, top: 15, bottom: 15)),
+                      padding: MaterialStateProperty.all(
+                          const EdgeInsets.only(left: 74, right: 74)),
                       textStyle: MaterialStateProperty.all(
-                          const TextStyle(fontSize: 18)))),
-              ElevatedButton.icon(
-                  onPressed: abrirWhatsapp,
-                  icon: const Icon(Icons.whatsapp, size: 22),
-                  label: const Text('Whatsapp'),
+                          const TextStyle(fontSize: 18))))),
+          Flexible(
+              child: ElevatedButton.icon(
+                  onPressed: enviarEmail,
+                  icon: const Icon(Icons.email_outlined, size: 22),
+                  label: const Text('Email'),
                   style: ButtonStyle(
-                      padding: MaterialStateProperty.all(const EdgeInsets.only(
-                          left: 65, right: 65, top: 15, bottom: 15)),
+                      padding: MaterialStateProperty.all(
+                          const EdgeInsets.only(left: 84, right: 84)),
                       textStyle: MaterialStateProperty.all(
-                          const TextStyle(fontSize: 18))))
-            ]),
-          ),
-        ));
+                          const TextStyle(fontSize: 18)))))
+        ]),
+      ),
+    );
   }
 }
 
