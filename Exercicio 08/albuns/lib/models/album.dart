@@ -4,9 +4,9 @@ class Album {
   final String title;
 
   const Album({
-    this.userId,
-    this.id,
-    this.title,
+    required this.userId,
+    required this.id,
+    required this.title,
   });
 
   factory Album.fromJson(Map<String, dynamic> json) {
