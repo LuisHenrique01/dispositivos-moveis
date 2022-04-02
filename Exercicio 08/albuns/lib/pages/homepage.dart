@@ -44,7 +44,7 @@ class _HomePageState extends State<HomePage> {
                   return Card(
                       child: InkWell(
                     onTap: () {
-                      _showMyDialog(data![index].id);
+                      _showMyDialog(data![index].userId);
                     },
                     child: Padding(
                       padding: const EdgeInsets.all(8),
