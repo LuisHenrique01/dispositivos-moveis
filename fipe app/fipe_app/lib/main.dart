@@ -20,8 +20,8 @@ class MyApp extends StatelessWidget {
               backgroundColor: Color(0xFF3f8978),
               titleTextStyle: AppStyles.titleStyle,
               iconTheme: IconThemeData(color: Colors.black))),
-      initialRoute: '/',
-      routes: Routers.routes,
+      initialRoute: Routers.homePage,
+      onGenerateRoute: RoutersGenerator.getRouter,
       debugShowCheckedModeBanner: false,
     );
   }
