@@ -1,4 +1,5 @@
 import 'package:fipe_app/models/brand.dart';
+import 'package:fipe_app/resources/widgets.dart';
 import 'package:fipe_app/services/requests.dart';
 import 'package:flutter/material.dart';
 
@@ -13,16 +14,40 @@ class BrandPage extends StatefulWidget {
 
 class _BrandPageState extends State<BrandPage> {
   late List<Brand> _brands;
+  late Future<List<Brand>> futureBrands;
+
+  @override
+  void initState() {
+    super.initState();
+    futureBrands = Fetch().getBrands(widget.data['type']);
+  }
 
   setBrands(brands) {
+    _brands = brands;
+    _brands.sort(((a, b) => a.name.toString().compareTo(b.name.toString())));
+  }
+
+  void _runFilter(String enteredKeyword) {
+    List<Brand> results = [];
+    if (enteredKeyword.isEmpty) {
+      results = _brands;
+    } else {
+      results = _brands
+          .where((brand) => brand.name
+              .toString()
+              .toLowerCase()
+              .contains(enteredKeyword.toLowerCase()))
+          .toList();
+    }
+
     setState(() {
-      _brands = brands;
+      _brands.clear();
+      _brands.addAll(results);
     });
   }
 
   @override
   Widget build(BuildContext context) {
-    Future<List<Brand>> futureBrands = Fetch().getBrands(widget.data['type']);
     return Scaffold(
       appBar: AppBar(title: Text(widget.data['title'])),
       body: Padding(
@@ -31,7 +56,7 @@ class _BrandPageState extends State<BrandPage> {
           children: [
             const SizedBox(height: 20),
             TextField(
-              onChanged: (value) => {},
+              onChanged: (value) => _runFilter(value),
               decoration: const InputDecoration(
                   labelText: 'Buscar', suffixIcon: Icon(Icons.search)),
             ),
@@ -43,22 +68,17 @@ class _BrandPageState extends State<BrandPage> {
                 if (snapshot.hasData) {
                   setBrands(snapshot.data);
                 }
-                return ListView.builder(itemBuilder: (context, index) {
-                  if (!snapshot.hasData) {
-                    return const Center(child: Text('Buscando...'));
-                  }
-                  return Card(
-                    key: ValueKey(_brands[index].code),
-                    elevation: 4,
-                    margin: const EdgeInsets.symmetric(vertical: 10),
-                    child: ListTile(
-                      leading: Text(_brands[index].code.toString()),
-                      title: Text(_brands[index].name.toString()),
-                      trailing: const Icon(Icons.keyboard_arrow_right),
-                      onTap: () => {},
-                    ),
-                  );
-                });
+                return snapshot.hasData
+                    ? ListView.builder(
+                        itemCount: _brands.length,
+                        itemBuilder: (context, index) {
+                          print(_brands.length);
+                          return SimpleCard(
+                              _brands[index].code.toString(),
+                              (index + 1).toString(),
+                              _brands[index].name.toString());
+                        })
+                    : const Center(child: CircularProgressIndicator());
               },
             ))
           ],

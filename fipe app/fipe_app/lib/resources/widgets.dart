@@ -34,3 +34,17 @@ Card imageCard(String imageName, String cardText, Function()? onTap) {
     ),
   );
 }
+
+Card SimpleCard(String key, String leading, String title) {
+  return Card(
+    key: ValueKey(key),
+    elevation: 4,
+    margin: const EdgeInsets.symmetric(vertical: 10),
+    child: ListTile(
+      leading: Text(leading.toUpperCase()),
+      title: Text(title.toUpperCase()),
+      trailing: const Icon(Icons.keyboard_arrow_right),
+      onTap: () => {},
+    ),
+  );
+}

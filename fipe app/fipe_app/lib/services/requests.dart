@@ -20,15 +20,14 @@ class Fetch {
   }
 
   Future<List<Brand>> getBrands(String type) async {
-    var url = Uri.parse('$urlBase/$type/brand');
+    var url = Uri.parse('$urlBase/$type/brands');
     var data = [];
     List<Brand> brands = [];
     final response = await http.get(url);
-
+    print('Chamou');
     if (response.statusCode == 200) {
       data = jsonDecode(response.body);
       brands = data.map((e) => Brand.fromJson(e)).toList();
-      print(brands);
       return brands;
     }
     throw Exception('Failed to load brands');
