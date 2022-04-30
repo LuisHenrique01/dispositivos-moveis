@@ -13,6 +13,7 @@ class BrandPage extends StatefulWidget {
 }
 
 class _BrandPageState extends State<BrandPage> {
+  late List<Brand> allBrands = [];
   late List<Brand> _brands;
   late Future<List<Brand>> futureBrands;
 
@@ -22,17 +23,22 @@ class _BrandPageState extends State<BrandPage> {
     futureBrands = Fetch().getBrands(widget.data['type']);
   }
 
+  setAllBrands(allBrands) {
+    allBrands.addAll(allBrands);
+  }
+
   setBrands(brands) {
     _brands = brands;
     _brands.sort(((a, b) => a.name.toString().compareTo(b.name.toString())));
+    if (allBrands.isEmpty) {
+      setAllBrands(brands);
+    }
   }
 
   void _runFilter(String enteredKeyword) {
-    List<Brand> results = [];
-    if (enteredKeyword.isEmpty) {
-      results = _brands;
-    } else {
-      results = _brands
+    List<Brand> results = allBrands;
+    if (enteredKeyword.isNotEmpty) {
+      results = allBrands
           .where((brand) => brand.name
               .toString()
               .toLowerCase()
@@ -72,8 +78,7 @@ class _BrandPageState extends State<BrandPage> {
                     ? ListView.builder(
                         itemCount: _brands.length,
                         itemBuilder: (context, index) {
-                          print(_brands.length);
-                          return SimpleCard(
+                          return simpleCard(
                               _brands[index].code.toString(),
                               (index + 1).toString(),
                               _brands[index].name.toString());

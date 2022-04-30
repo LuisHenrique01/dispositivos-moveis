@@ -35,7 +35,7 @@ Card imageCard(String imageName, String cardText, Function()? onTap) {
   );
 }
 
-Card SimpleCard(String key, String leading, String title) {
+Card simpleCard(String key, String leading, String title) {
   return Card(
     key: ValueKey(key),
     elevation: 4,
