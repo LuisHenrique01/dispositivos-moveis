@@ -50,7 +50,7 @@ class _HomePageState extends State<HomePage> {
               () => {
                     Navigator.pushNamed(
                       context,
-                      Routers.brandPage,
+                      Routers.brandsPage,
                       arguments: Arguments({'type': 'cars', 'title': 'Carros'}),
                     )
                   }),
@@ -60,7 +60,7 @@ class _HomePageState extends State<HomePage> {
               () => {
                     Navigator.pushNamed(
                       context,
-                      Routers.brandPage,
+                      Routers.brandsPage,
                       arguments:
                           Arguments({'type': 'motorcycles', 'title': 'Motos'}),
                     )
@@ -71,7 +71,7 @@ class _HomePageState extends State<HomePage> {
               () => {
                     Navigator.pushNamed(
                       context,
-                      Routers.brandPage,
+                      Routers.brandsPage,
                       arguments:
                           Arguments({'type': 'trucks', 'title': 'Caminhões'}),
                     )

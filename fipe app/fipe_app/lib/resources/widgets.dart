@@ -35,7 +35,7 @@ Card imageCard(String imageName, String cardText, Function()? onTap) {
   );
 }
 
-Card simpleCard(String key, String leading, String title) {
+Card simpleCard(String key, String leading, String title, Function()? onTap) {
   return Card(
     key: ValueKey(key),
     elevation: 4,
@@ -44,7 +44,7 @@ Card simpleCard(String key, String leading, String title) {
       leading: Text(leading.toUpperCase()),
       title: Text(title.toUpperCase()),
       trailing: const Icon(Icons.keyboard_arrow_right),
-      onTap: () => {},
+      onTap: onTap,
     ),
   );
 }

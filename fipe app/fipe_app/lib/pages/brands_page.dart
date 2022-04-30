@@ -1,18 +1,20 @@
+import 'package:fipe_app/configs/routers.dart';
+import 'package:fipe_app/models/arguments.dart';
 import 'package:fipe_app/models/brand.dart';
 import 'package:fipe_app/resources/widgets.dart';
 import 'package:fipe_app/services/requests.dart';
 import 'package:flutter/material.dart';
 
-class BrandPage extends StatefulWidget {
+class BrandsPage extends StatefulWidget {
   final Map<String, dynamic> data;
 
-  const BrandPage({Key? key, required this.data}) : super(key: key);
+  const BrandsPage({Key? key, required this.data}) : super(key: key);
 
   @override
-  State<BrandPage> createState() => _BrandPageState();
+  State<BrandsPage> createState() => _BrandsPageState();
 }
 
-class _BrandPageState extends State<BrandPage> {
+class _BrandsPageState extends State<BrandsPage> {
   late List<Brand> allBrands = [];
   late List<Brand> _brands;
   late Future<List<Brand>> futureBrands;
@@ -23,16 +25,13 @@ class _BrandPageState extends State<BrandPage> {
     futureBrands = Fetch().getBrands(widget.data['type']);
   }
 
-  setAllBrands(allBrands) {
-    allBrands.addAll(allBrands);
+  setAllBrands(values) {
+    allBrands.addAll(values);
   }
 
   setBrands(brands) {
     _brands = brands;
     _brands.sort(((a, b) => a.name.toString().compareTo(b.name.toString())));
-    if (allBrands.isEmpty) {
-      setAllBrands(brands);
-    }
   }
 
   void _runFilter(String enteredKeyword) {
@@ -73,6 +72,9 @@ class _BrandPageState extends State<BrandPage> {
               builder: (context, snapshot) {
                 if (snapshot.hasData) {
                   setBrands(snapshot.data);
+                  if (allBrands.isEmpty) {
+                    setAllBrands(snapshot.data);
+                  }
                 }
                 return snapshot.hasData
                     ? ListView.builder(
@@ -81,7 +83,18 @@ class _BrandPageState extends State<BrandPage> {
                           return simpleCard(
                               _brands[index].code.toString(),
                               (index + 1).toString(),
-                              _brands[index].name.toString());
+                              _brands[index].name.toString(),
+                              () => {
+                                    Navigator.pushNamed(
+                                      context,
+                                      Routers.modelsPage,
+                                      arguments: Arguments({
+                                        'type': widget.data['type'],
+                                        'brand_name': _brands[index].name,
+                                        'brand_code': _brands[index].code
+                                      }),
+                                    )
+                                  });
                         })
                     : const Center(child: CircularProgressIndicator());
               },
