@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'package:fipe_app/models/model.dart';
 import 'package:fipe_app/models/reference.dart';
 import 'package:fipe_app/models/brand.dart';
+import 'package:fipe_app/models/years.dart';
 import 'package:http/http.dart' as http;
 
 class Fetch {
@@ -45,5 +46,19 @@ class Fetch {
     }
     print('Falhou a request de Models');
     throw Exception('Faeled to load models');
+  }
+
+  Future<List<Years>> getYears(String type, String brand, String model) async {
+    var url = Uri.parse('$urlBase/$type/brands/$brand/models/$model/years');
+    var data = [];
+    List<Years> years = [];
+    final response = await http.get(url);
+    if (response.statusCode == 200) {
+      data = jsonDecode(response.body);
+      years = data.map((e) => Years.fromJson(e)).toList();
+      return years;
+    }
+    print('Falhou a request de Years');
+    throw Exception('Faeled to load years');
   }
 }

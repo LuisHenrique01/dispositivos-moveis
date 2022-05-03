@@ -1,5 +1,5 @@
 import 'package:fipe_app/models/model.dart';
-import 'package:fipe_app/resources/widgets.dart';
+import 'package:fipe_app/models/years.dart';
 import 'package:fipe_app/services/requests.dart';
 import 'package:flutter/material.dart';
 
@@ -13,10 +13,12 @@ class ModelsPage extends StatefulWidget {
 }
 
 class _ModelsPageState extends State<ModelsPage> {
-  late List<Model> _models;
+  late List<Model> _models = [];
   late List<Model> allModels = [];
+  late List<List<Years>> _years = [];
   final ScrollController _scrollController = ScrollController();
-  int limit = 6;
+  int _year = 0;
+  int limit = 4;
   bool hasMore = true;
   bool isLoading = false;
 
@@ -49,15 +51,6 @@ class _ModelsPageState extends State<ModelsPage> {
     super.dispose();
   }
 
-  setAllModels(values) {
-    allModels.addAll(values);
-  }
-
-  setModels(models) {
-    _models = models;
-    _models.sort(((a, b) => a.name.toString().compareTo(b.name.toString())));
-  }
-
   void _runFilter(String enteredKeyword) {
     List<Model> results = allModels;
     if (enteredKeyword.isNotEmpty) {
@@ -77,18 +70,33 @@ class _ModelsPageState extends State<ModelsPage> {
 
   Future fetch() async {
     if (isLoading) return;
+
     isLoading = true;
     if (allModels.isEmpty) {
       allModels = await Fetch()
           .getModels(widget.data['type'], widget.data['brand_code']);
     }
+
     int lengthActual = _models.length;
+    List<Model> subList;
+    List<List<Years>> tempList = [];
+    if (allModels.length - lengthActual < limit) {
+      subList = allModels.sublist(lengthActual);
+    } else {
+      subList = allModels.sublist(lengthActual, lengthActual + limit);
+    }
+    for (var item in subList) {
+      List<Years> temp = await Fetch().getYears(
+          widget.data['type'], widget.data['brand_code'], item.code.toString());
+      tempList.add(temp);
+    }
     setState(() {
-      isLoading = false;
       if (allModels.length - lengthActual < limit) {
         hasMore = false;
       }
-      _models.addAll(allModels.sublist(lengthActual, lengthActual + limit));
+      isLoading = false;
+      _years.addAll(tempList);
+      _models.addAll(subList);
     });
   }
 
@@ -109,27 +117,67 @@ class _ModelsPageState extends State<ModelsPage> {
             ),
             const SizedBox(height: 20),
             Expanded(
-              child: FutureBuilder<List<Model>>(
-                future: futureModels,
-                builder: (context, snapshot) {
-                  if (snapshot.hasData) {
-                    setModels(snapshot.data);
-                    if (allModels.isEmpty) {
-                      setAllModels(snapshot.data);
-                    }
-                  }
-                  return snapshot.hasData
-                      ? ListView.builder(
-                          itemCount: _models.length,
-                          itemBuilder: (context, index) {
-                            return simpleCard(
-                                _models[index].code.toString(),
-                                (index + 1).toString(),
-                                _models[index].name.toString(),
-                                () => {});
-                          })
-                      : const Center(child: CircularProgressIndicator());
-                },
+              child: RefreshIndicator(
+                onRefresh: refresh,
+                child: _models.isNotEmpty
+                    ? ListView.builder(
+                        controller: _scrollController,
+                        itemCount: _models.length,
+                        itemBuilder: (context, index) {
+                          if (index < _models.length) {
+                            return Card(
+                              key: ValueKey((index + 1).toString()),
+                              elevation: 4,
+                              margin: const EdgeInsets.symmetric(vertical: 10),
+                              child: Column(
+                                children: [
+                                  ListTile(
+                                    leading:
+                                        Text(_models[index].code.toString()),
+                                    title: Text(_models[index].name.toString()),
+                                    trailing:
+                                        const Icon(Icons.keyboard_arrow_right),
+                                    onTap: () => {},
+                                  ),
+                                  Wrap(
+                                    spacing: 8.0,
+                                    runSpacing: 4.0,
+                                    children: List<Widget>.generate(
+                                      _years[index].length,
+                                      (int yearIndex) {
+                                        return ChoiceChip(
+                                          label: Text(_years[index][yearIndex]
+                                              .name
+                                              .toString()),
+                                          selected: _year == yearIndex,
+                                          onSelected: (bool selected) {
+                                            setState(() {
+                                              _year = selected ? index : 0;
+                                            });
+                                          },
+                                        );
+                                      },
+                                    ).toList(),
+                                  )
+                                ],
+                              ),
+                            );
+                          }
+                          return Padding(
+                            padding: const EdgeInsets.symmetric(vertical: 30.0),
+                            child: hasMore
+                                ? const Center(
+                                    child: CircularProgressIndicator())
+                                : const Center(
+                                    child: Text(
+                                    'Não possui mais modelos.',
+                                    style:
+                                        TextStyle(fontWeight: FontWeight.bold),
+                                  )),
+                          );
+                        },
+                      )
+                    : const Center(child: CircularProgressIndicator()),
               ),
             )
           ],
