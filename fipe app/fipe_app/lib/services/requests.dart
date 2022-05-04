@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'package:fipe_app/models/info.dart';
 import 'package:fipe_app/models/model.dart';
 import 'package:fipe_app/models/reference.dart';
 import 'package:fipe_app/models/brand.dart';
@@ -60,5 +61,18 @@ class Fetch {
     }
     print('Falhou a request de Years');
     throw Exception('Faeled to load years');
+  }
+
+  Future<Info> getInfos(
+      String type, String brand, String model, String year) async {
+    var url =
+        Uri.parse('$urlBase/$type/brands/$brand/models/$model/years/$year');
+    final response = await http.get(url);
+    if (response.statusCode == 200) {
+      var data = jsonDecode(response.body);
+      return Info.fromJson(data);
+    }
+    print('Falhou a request de infos');
+    throw Exception('Faeled to load infos');
   }
 }

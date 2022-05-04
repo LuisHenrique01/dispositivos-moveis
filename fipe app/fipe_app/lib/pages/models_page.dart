@@ -1,3 +1,5 @@
+import 'package:fipe_app/configs/routers.dart';
+import 'package:fipe_app/models/arguments.dart';
 import 'package:fipe_app/models/model.dart';
 import 'package:fipe_app/models/years.dart';
 import 'package:fipe_app/services/requests.dart';
@@ -51,23 +53,6 @@ class _ModelsPageState extends State<ModelsPage> {
     super.dispose();
   }
 
-  void _runFilter(String enteredKeyword) {
-    List<Model> results = allModels;
-    if (enteredKeyword.isNotEmpty) {
-      results = allModels
-          .where((model) => model.name
-              .toString()
-              .toLowerCase()
-              .contains(enteredKeyword.toLowerCase()))
-          .toList();
-    }
-
-    setState(() {
-      _models.clear();
-      _models.addAll(results);
-    });
-  }
-
   Future fetch() async {
     if (isLoading) return;
 
@@ -109,13 +94,6 @@ class _ModelsPageState extends State<ModelsPage> {
         padding: const EdgeInsets.all(10),
         child: Column(
           children: [
-            const SizedBox(height: 20),
-            TextField(
-              onChanged: (value) => {},
-              decoration: const InputDecoration(
-                  labelText: 'Buscar modelo', suffixIcon: Icon(Icons.search)),
-            ),
-            const SizedBox(height: 20),
             Expanded(
               child: RefreshIndicator(
                 onRefresh: refresh,
@@ -137,7 +115,19 @@ class _ModelsPageState extends State<ModelsPage> {
                                     title: Text(_models[index].name.toString()),
                                     trailing:
                                         const Icon(Icons.keyboard_arrow_right),
-                                    onTap: () => {},
+                                    onTap: () => {
+                                      Navigator.pushNamed(
+                                        context,
+                                        Routers.infosPage,
+                                        arguments: Arguments({
+                                          'type': widget.data['type'],
+                                          'brand_code':
+                                              widget.data['brand_code'],
+                                          'model_code': _models[index].code,
+                                          'year_code': _years[index][_year].code
+                                        }),
+                                      )
+                                    },
                                   ),
                                   Wrap(
                                     spacing: 8.0,
@@ -152,7 +142,7 @@ class _ModelsPageState extends State<ModelsPage> {
                                           selected: _year == yearIndex,
                                           onSelected: (bool selected) {
                                             setState(() {
-                                              _year = selected ? index : 0;
+                                              _year = selected ? yearIndex : 0;
                                             });
                                           },
                                         );
