@@ -26,38 +26,52 @@ class _InfoPageState extends State<InfoPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+        appBar: AppBar(title: const Text('Descrição')),
         body: FutureBuilder(
-      future: futureInfos,
-      builder: (context, snapshot) {
-        var data = snapshot.data as Info;
-        if (!snapshot.hasData) {
-          return const Center(child: CircularProgressIndicator());
-        }
-        return Column(
-          crossAxisAlignment: CrossAxisAlignment.center,
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Row(
+          future: futureInfos,
+          builder: (context, snapshot) {
+            if (!snapshot.hasData) {
+              return const Center(child: CircularProgressIndicator());
+            }
+            var data = snapshot.data as Info;
+            return Column(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Expanded(
-                    child: Column(
+                const SizedBox(height: 5),
+                Row(
                   children: [
-                    const Text('Preço:',
-                        style: TextStyle(
-                          fontSize: 22.0,
-                          fontWeight: FontWeight.bold,
-                        )),
-                    const SizedBox(
-                      height: 5,
-                    ),
-                    Text('${data.price}')
+                    miniColumn('Fabricante:', data.brand.toString()),
+                    miniColumn('Modelo:', data.model.toString()),
                   ],
-                ))
+                ),
+                const SizedBox(height: 15),
+                miniColumn("Preço:", data.price.toString()),
+                miniColumn('Ano do modelo:', data.modelYear.toString()),
+                miniColumn('Combustível:', data.fuel.toString()),
+                miniColumn('FIPE Código:', data.codeFipe.toString()),
+                miniColumn(
+                    'Mês de referência FIPE:', data.referenceMonth.toString())
               ],
-            )
-          ],
-        );
-      },
+            );
+          },
+        ));
+  }
+
+  Widget miniColumn(String title, String value) {
+    return Expanded(
+        child: Column(
+      children: [
+        Text(title,
+            style: const TextStyle(
+              fontSize: 22.0,
+              fontWeight: FontWeight.bold,
+            )),
+        const SizedBox(
+          height: 5,
+        ),
+        Text(value, style: const TextStyle(fontSize: 20.0)),
+      ],
     ));
   }
 }
